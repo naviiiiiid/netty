@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="DEBUG" >
+
+    <Properties>
+        <Property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss:SSS}  %-5p [%t][%M:%L] %m  %n</Property>
+        <Property name="LOG_PATTERN_ERROR">%d{yyyy-MM-dd HH:mm:ss:SSS}  %-5p [%t][%M:%L] %m  %n</Property>
+        <Property name="LOG_PATH">logs/</Property>
+    </Properties>
+
+    <Appenders>
+
+        <RollingRandomAccessFile name="TRACE" fileName="${LOG_PATH}/log"
+                                 filePattern="${LOG_PATH}/archive-$${date:yyyy-MM-dd}/log-trace-%d-%i.log.bz2">
+            <ThresholdFilter level="TRACE" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout  pattern="${LOG_PATTERN}" />
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="900 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="50"/>
+        </RollingRandomAccessFile>
+
+
+        <RollingRandomAccessFile name="ERROR" fileName="${LOG_PATH}/log-error.log"
+                                 filePattern="${LOG_PATH}/archive-$${date:yyyy-MM-dd}/log-error-%d-%i.log.bz2">
+            <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout  pattern="${LOG_PATTERN_ERROR}" />
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="300 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingRandomAccessFile>
+
+    </Appenders>
+    <Loggers>
+
+        <Root level="TRACE" includeLocation="true" >
+            <AppenderRef ref="ERROR"/>
+            <AppenderRef ref="TRACE"/>
+        </Root>
+
+    </Loggers>
+</Configuration>
